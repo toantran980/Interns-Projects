@@ -196,3 +196,19 @@ Input text:
 - Add subtle animations and feedback: Add smooth transitions for color pickers, button presses, and diagram rendering. Provide clear feedback for loading and errors.
 - Visual polish (layout, typography, button styles, responsive spacing, subtle animations).
 - Improve diagram parsing & error handling. Make prompts and fallback parser more robust to avoid invalid Mermaid being returned.
+
+## Deploying to Vercel (frontend + backend as serverless functions)
+
+To deploy the entire app to Vercel as a single project (frontend + serverless backend):
+
+1. Create a new project on Vercel and import this repository.
+2. In Project Settings > Environment Variables, add:
+   - `OPENAI_API_KEY` — your OpenAI API key (leave empty to use the deterministic fallback parser)
+   - (Optional) `OPENAI_API_URL` — custom OpenAI-compatible endpoint
+3. When configuring the project, set the root to the repository root; Vercel will detect the frontend and the `frontend/api/` serverless functions automatically.
+4. Deploy. After the build finishes, the frontend will talk to the serverless function at `/api/diagram`.
+
+Notes:
+
+- For local development keep running `npm run dev` in the `frontend` and `backend` folders as before. In production the frontend calls `/api/diagram` by default.
+- If you prefer to host only the frontend on Vercel and keep the backend elsewhere, set `VITE_API_BASE` in Vercel to point to the external backend URL instead of adding serverless functions.
