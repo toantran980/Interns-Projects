@@ -1,0 +1,16 @@
+/* Mermaid diagram arrow/line color override for both light and dark mode */
+.mermaid svg {
+  background: #fff !important;
+}
+.mermaid svg .edgePath path,
+.mermaid svg .arrowheadPath {
+  stroke: #0096e6 !important;
+  fill: #0096e6 !important;
+  stroke-width: 2.5px !important;
+  opacity: 1 !important;
+}
+.mermaid svg .edgeLabel {
+  fill: #0096e6 !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+}
