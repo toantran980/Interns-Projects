@@ -213,3 +213,7 @@ Notes:
 
 - For local development keep running `npm run dev` in the `frontend` and `backend` folders as before. In production the frontend calls `/api/diagram` by default.
 - If you prefer to host only the frontend on Vercel and keep the backend elsewhere, set `VITE_API_BASE` in Vercel to point to the external backend URL instead of adding serverless functions.
+
+---
+
+Author: Toan Tran
