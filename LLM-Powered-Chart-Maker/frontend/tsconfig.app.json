@@ -21,7 +21,11 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "types": ["node", "vite/client"]
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "api"
+  ]
 }
