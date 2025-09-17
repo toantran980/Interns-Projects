@@ -14,12 +14,25 @@ function buildPrompt(req: DiagramRequest & { direction?: string }) {
   const { text, diagramType, instruction, direction } = req;
   const dir = direction || DEFAULT_DIRECTION;
   const directive = `
-    Convert the following text into a MERMAID diagram of type ${diagramType}.
-    Return ONLY a fenced mermaid block (\`\`\`mermaid ... \`\`\`).
-    Use 'flowchart ${dir}' for flowcharts, 'gantt' for timelines, and flowchart nodes for rules.
-    Input:
-      ${text}
-  `.trim();
+You are an assistant that converts plain English into a MERMAID diagram of type ${diagramType}.
+Return ONLY the mermaid diagram text (no explanation). Use the mermaid language appropriate for that type:
+- flowchart: "flowchart ${dir}" with nodes and arrows.
+- timeline: use "gantt" or a simple labeled timeline using "timeline" syntax if available (if not, use a vertical flow of time).
+- rules: produce a graph or list of conditional rules as mermaid "flowchart" nodes that show triggers and outcomes.
+
+Input text:
+${text}
+
+If the text contains explicit time markers (dates, years), prefer timeline. 
+If the user requested "rules", convert each rule to a conditional node connected to outcomes. 
+If ambiguous, produce a flowchart with main nodes.
+
+Always output a syntactically valid mermaid block starting with:
+\`\`\`mermaid
+...diagram...
+\`\`\`
+and nothing else.
+`;
 
   const userInstruction = instruction ? `User instruction: ${instruction}\n` : '';
   return `${userInstruction}${directive}`.trim();
@@ -37,7 +50,7 @@ export async function generateDiagramWithLLM(req: DiagramRequest): Promise<strin
 
   // Chat completions payload (adjust model name as needed)
   const payload = {
-    model: 'gpt-5',
+    model: 'gpt-4o-mini', // example; change as needed
     messages: [
       { role: 'system', content: 'You are a helpful assistant that produces only mermaid diagrams.' },
       { role: 'user', content: prompt }
@@ -84,6 +97,7 @@ export function fallbackDiagram(req: DiagramRequest & { direction?: string }): s
     // Add more style parsing as needed (e.g., dark mode, colors)
     if (/dark/.test(lower)) styleDirectives += '%%{init: {"theme": "dark"}}%%\n';
     if (/monochrome/.test(lower)) styleDirectives += '%%{init: {"themeVariables": {"primaryColor": "#222", "edgeLabelBackground":"#fff"}}}%%\n';
+    // Could add more style options here
   }
   // split into lines by newlines or sentences
   const lines = text
