@@ -12,9 +12,13 @@ import { moveCaretToEnd } from './utils/dom';
 
 type DiagramType = 'flowchart' | 'timeline' | 'rules';
 
-export default function App() {
-  // selection state and handlers are provided by useSelection hook (declared below)
 
+/**
+ * Main application component definition
+ * Handles text input, file upload, text highlighting, diagram generation requests,
+ * and rendering the resulting mermaid diagram.
+ */
+export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [text, setText] = useState<string>('');
   const [diagramType, setDiagramType] = useState<DiagramType>('flowchart');
@@ -70,6 +74,8 @@ export default function App() {
     }
   }, [darkMode]);
 
+  // Handle file upload and extract text content
+  // For PDFs, text extraction is handled in PDFViewer component
   function handleFileLoaded(content: string, file: File) {
     setUploadedFile(file);
     if (file.type === 'application/pdf') {
@@ -78,6 +84,11 @@ export default function App() {
     setText(content);
   }
 
+  /**
+   * Sends a diagram generation request to the backend for either the full text 
+   * or the selected/highlighted text.
+   * If no text is available, shows an alert.
+   */
   async function requestDiagram(payload: { text: string; diagramType: DiagramType; instruction?: string }, which: 'full' | 'selection') {
     const trimmedText = payload.text?.trim();
     if (!trimmedText) {
@@ -289,6 +300,9 @@ export default function App() {
   );
 }
 
+/**
+ * Extracts mermaid code from a fenced code block, or returns the input trimmed.
+ */
 function extractMermaidCode(block: string): string {
   const match = block.match(/```mermaid\s*([\s\S]*?)```/);
   return match ? match[1].trim() : block.trim();

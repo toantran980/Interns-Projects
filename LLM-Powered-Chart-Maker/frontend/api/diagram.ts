@@ -29,7 +29,7 @@ async function generateDiagramWithLLM(req: DiagramRequest): Promise<string> {
   if (!OPENAI_API_KEY) throw new Error('OpenAI API key is missing.');
   const prompt = buildPrompt(req);
   const payload = {
-    model: 'gpt-4o-mini',
+    model: 'gpt-5',
     messages: [
       { role: 'system', content: 'You are a helpful assistant that produces only mermaid diagrams.' },
       { role: 'user', content: prompt }
