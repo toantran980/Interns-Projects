@@ -11,8 +11,12 @@ import { moveCaretToEnd } from './utils/dom';
 
 type DiagramType = 'flowchart' | 'timeline' | 'rules';
 
+/**
+ * Main application component definition
+ * Handles text input, file upload, text highlighting, diagram generation requests,
+ * and rendering the resulting mermaid diagram.
+ */
 export default function App() {
-  // selection state and handlers are provided by useSelection hook (declared below)
 
   const [darkMode, setDarkMode] = useState(false);
   const [text, setText] = useState<string>('');
@@ -69,6 +73,9 @@ export default function App() {
     }
   }, [darkMode]);
 
+
+  // Handle file upload (text or PDF). 
+  // For text files, read content and set as text.
   function handleFileLoaded(content: string, file: File) {
     setUploadedFile(file);
     if (file.type === 'application/pdf') {
@@ -76,6 +83,12 @@ export default function App() {
     }
     setText(content);
   }
+
+  /**
+   * Sends a diagram generation request to the backend for either the full text 
+   * or the selected/highlighted text.
+   * If no text is available, shows an alert.
+   */
 
   async function requestDiagram(payload: { text: string; diagramType: DiagramType; instruction?: string }, which: 'full' | 'selection') {
     const trimmedText = payload.text?.trim();
@@ -103,6 +116,11 @@ export default function App() {
   }
 
 
+  /**
+   * Generates a diagram for the currently selected or highlighted text.
+   * If no text is selected or highlighted, uses the full text as fallback.
+   */
+
   function generateForSelection() {
     let highlightedText = '';
     if (editableRef.current) {
@@ -123,10 +141,6 @@ export default function App() {
     const payload = { text: highlightedText || cachedSelection || text, diagramType, instruction: instructionTextAreaRef.current?.value };
     requestDiagram(payload, 'selection');
   }
-
-  // useSelection exposes hasSelectionOrHighlights
-
-  // selection behavior is handled inside the useSelection hook
 
   // Apply highlight color to selected text using hook
   function handleColorPick(color: string) {
@@ -288,6 +302,9 @@ export default function App() {
   );
 }
 
+/**
+ * Extracts mermaid code from a fenced code block, or returns the input trimmed.
+ */
 function extractMermaidCode(block: string): string {
   const match = block.match(/```mermaid\s*([\s\S]*?)```/);
   return match ? match[1].trim() : block.trim();
