@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { generateDiagramWithLLM } from './diagram';
 import { DiagramRequest } from './types';
+import { fallbackDiagram } from './diagram';
 
 const app = express();
 app.use(cors({ origin: true }));
@@ -14,8 +15,6 @@ app.get('/health', (_req, res) => {
   const fallback = !process.env.OPENAI_API_KEY;
   res.json({ ok: true, fallback });
 });
-
-import { fallbackDiagram } from './diagram';
 
 app.post('/api/diagram', async (req, res) => {
   const body = req.body as DiagramRequest;
