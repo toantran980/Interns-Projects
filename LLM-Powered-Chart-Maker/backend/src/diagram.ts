@@ -50,7 +50,7 @@ export async function generateDiagramWithLLM(req: DiagramRequest): Promise<strin
 
   // Chat completions payload (adjust model name as needed)
   const payload = {
-    model: 'gpt-4o-mini', // example; change as needed
+    model: 'gpt-5',
     messages: [
       { role: 'system', content: 'You are a helpful assistant that produces only mermaid diagrams.' },
       { role: 'user', content: prompt }
@@ -97,7 +97,6 @@ export function fallbackDiagram(req: DiagramRequest & { direction?: string }): s
     // Add more style parsing as needed (e.g., dark mode, colors)
     if (/dark/.test(lower)) styleDirectives += '%%{init: {"theme": "dark"}}%%\n';
     if (/monochrome/.test(lower)) styleDirectives += '%%{init: {"themeVariables": {"primaryColor": "#222", "edgeLabelBackground":"#fff"}}}%%\n';
-    // Could add more style options here
   }
   // split into lines by newlines or sentences
   const lines = text
