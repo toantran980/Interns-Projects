@@ -15,6 +15,11 @@ interface FloatingColorPickerProps {
   onRemove?: () => void;
 }
 
+/**
+ * A floating color picker component that appears at a specified position.
+ * Users can select a color or remove the color if the option is provided.
+ * The component adapts its styles based on the current theme (light or dark mode).
+ */
 const FloatingColorPicker: React.FC<FloatingColorPickerProps> = ({ position, onPick, showRemove, onRemove }) => {
   // Detect dark mode
   const isDark = typeof document !== 'undefined' && document.body.classList.contains('dark-mode');

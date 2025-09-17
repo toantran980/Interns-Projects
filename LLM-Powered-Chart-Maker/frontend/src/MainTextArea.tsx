@@ -9,6 +9,11 @@ interface MainTextAreaProps {
   onSelection: () => void;
 }
 
+/**
+ * Main text area component where users can input or paste text.
+ * Supports dark mode and shows placeholder text when empty.
+ * Calls onSelection callback when text selection changes.
+ */
 const MainTextArea: React.FC<MainTextAreaProps> = ({ editableRef, text, setText, darkMode, onSelection }) => (
   <div style={{ position: 'relative', minHeight: 120, marginBottom: 8 }}>
     <div

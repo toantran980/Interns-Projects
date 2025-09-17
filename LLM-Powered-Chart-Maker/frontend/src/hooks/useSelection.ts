@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { RefObject } from 'react';
 
-
+// Helper to get all text nodes between two boundary nodes
 function getAllTextNodesBetween(startNode: Node, endNode: Node, root: Node): Text[] {
   const nodes: Text[] = [];
   let foundStart = false;
@@ -22,6 +22,7 @@ function getAllTextNodesBetween(startNode: Node, endNode: Node, root: Node): Tex
   return nodes;
 }
 
+// Wrap a portion of a text node in a span with given background color
 function wrapTextRange(node: Text, start: number, end: number, color: string) {
   const span = document.createElement('span');
   span.style.background = color;
@@ -34,6 +35,7 @@ function wrapTextRange(node: Text, start: number, end: number, color: string) {
   if (text.parentNode) text.parentNode.replaceChild(span, text);
 }
 
+// Custom hook to manage text selection and highlighting in a contenteditable div
 export function useSelection(editableRef: RefObject<HTMLElement | null>) {
   const [cachedSelection, setCachedSelection] = useState('');
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -99,6 +101,7 @@ export function useSelection(editableRef: RefObject<HTMLElement | null>) {
     return charCount;
   }
 
+  // Set caret at given character offset within root element
   function setCaretAtCharacterOffset(root: HTMLElement, chars: number) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
     let node: Node | null = walker.nextNode();
@@ -138,6 +141,7 @@ export function useSelection(editableRef: RefObject<HTMLElement | null>) {
     }
   }
 
+  // On input, if caret is inside a highlighted span, unwrap that span so new typing isn't highlighted
   useEffect(() => {
     const el = editableRef.current;
     if (!el) return;
@@ -178,6 +182,7 @@ export function useSelection(editableRef: RefObject<HTMLElement | null>) {
     return () => el.removeEventListener('input', onInput);
   }, [editableRef]);
 
+  // Apply highlight of given color to the selected range
   function applyHighlight(color: string) {
     if (!selectedRange || !editableRef.current) return;
     const range = selectedRange;
@@ -201,6 +206,7 @@ export function useSelection(editableRef: RefObject<HTMLElement | null>) {
         }
       }
     }
+
     if (sel) sel.removeAllRanges();
     // Move caret after last inserted span so typing doesn't continue inside highlight
     if (lastInsertedSpan && editableRef.current) {
@@ -222,6 +228,7 @@ export function useSelection(editableRef: RefObject<HTMLElement | null>) {
     setSelectedRange(null);
   }
 
+  // Remove all highlights in the editable area
   function removeHighlights() {
     if (!editableRef.current) return;
     const spans = Array.from(editableRef.current.querySelectorAll('span.highlighted-text')) as HTMLElement[];
@@ -263,6 +270,7 @@ export function useSelection(editableRef: RefObject<HTMLElement | null>) {
     setSelectedRange(null);
   }
 
+  // Whether there's any current selection or existing highlights
   const hasSelectionOrHighlights = (() => {
     if (cachedSelection && cachedSelection.trim()) return true;
     if (!editableRef.current) return false;

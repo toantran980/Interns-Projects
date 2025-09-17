@@ -114,7 +114,7 @@ export default function App() {
     if (which === 'selection') setLoadingSelection(false);
   }
 
-
+  // Generate diagram for selected/highlighted text
   function generateForSelection() {
     let highlightedText = '';
     if (editableRef.current) {

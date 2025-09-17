@@ -5,6 +5,8 @@ interface DiagramResultProps {
   mermaid: string;
 }
 
+// Extract mermaid code from a markdown code block if present
+// e.g. ```mermaid ... ```
 function extractMermaidCode(block: string): string {
   const match = block.match(/```mermaid\s*([\s\S]*?)```/);
   return match ? match[1].trim() : block.trim();

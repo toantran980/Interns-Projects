@@ -8,6 +8,7 @@ export function getApiBase(): string {
 
 export type DiagramPayload = { text: string; diagramType: string; instruction?: string };
 
+// Post a diagram generation request to the backend API
 export async function postDiagram(payload: DiagramPayload) {
   const base = getApiBase();
   const res = await fetch(`${base.replace(/\/$/, '')}/api/diagram`, {

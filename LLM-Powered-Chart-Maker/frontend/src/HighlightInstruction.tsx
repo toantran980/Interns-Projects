@@ -8,6 +8,9 @@ const COLORS = [
   { name: 'Orange', value: '#ffe0b2' },
 ];
 
+/**
+ * Component that provides instructions and options for highlighting text.
+ */
 export default function HighlightInstruction() {
   const [color, setColor] = useState(COLORS[0].value);
 

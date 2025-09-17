@@ -13,6 +13,11 @@ interface DiagramControlsProps {
   onGenerateSelection: () => void;
 }
 
+/**
+ * Controls for selecting diagram type, adding instructions, and generating diagrams.
+ * Includes dropdown for diagram type, textarea for instructions, and buttons to generate
+ * from full text or selection.
+ */
 const DiagramControls: React.FC<DiagramControlsProps> = ({
   diagramType,
   setDiagramType,

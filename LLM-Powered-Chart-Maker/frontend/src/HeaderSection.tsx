@@ -5,6 +5,7 @@ interface HeaderSectionProps {
   onToggleDarkMode: () => void;
 }
 
+// Header section with title, description, and dark mode toggle
 const HeaderSection: React.FC<HeaderSectionProps> = ({ darkMode, onToggleDarkMode }) => (
   <>
     <button

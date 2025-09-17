@@ -4,6 +4,11 @@ interface FileUploadProps {
   onFileLoaded: (content: string, file: File) => void;
 }
 
+/**
+ * FileUpload component allows users to upload .txt, .pdf, .doc, or .docx files.
+ * It reads the content of text files and passes it to the parent component via onFileLoaded callback.
+ * For PDF files, it directly passes the file object for further processing (e.g., rendering).  
+ */
 export default function FileUpload({ onFileLoaded }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 

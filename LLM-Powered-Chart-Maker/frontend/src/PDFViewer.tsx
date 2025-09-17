@@ -16,6 +16,8 @@ interface PDFViewerProps {
   onExtractedHighlights?: (highlights: Highlight[]) => void;
 }
 
+
+//PDFViewer component to preview a PDF file and extract highlighted text
 export default function PDFViewer({ file, onExtractedHighlights }: PDFViewerProps) {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [highlights, setHighlights] = useState<Highlight[]>([]);
@@ -48,6 +50,7 @@ export default function PDFViewer({ file, onExtractedHighlights }: PDFViewerProp
     return () => window.removeEventListener('message', handler);
   }, []);
 
+  // When a new PDF file is loaded, display it and extract highlights
   useEffect(() => {
     if (!file || file.type !== 'application/pdf') return;
     const url = URL.createObjectURL(file);
@@ -61,6 +64,8 @@ export default function PDFViewer({ file, onExtractedHighlights }: PDFViewerProp
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         const allHighlights: Highlight[] = [];
+
+  // Iterate through all pages to find highlights
   for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
     const page = await pdf.getPage(pageNum);
     const annotations = await page.getAnnotations();
@@ -114,6 +119,7 @@ export default function PDFViewer({ file, onExtractedHighlights }: PDFViewerProp
 
   if (!file || file.type !== 'application/pdf') return null;
 
+  // Render the PDF in an iframe and show extracted highlights
   return (
     <div style={{ margin: '16px 0', border: '1px solid #e6eef6', borderRadius: 8, overflow: 'hidden', background: '#23263a' }}>
       <iframe

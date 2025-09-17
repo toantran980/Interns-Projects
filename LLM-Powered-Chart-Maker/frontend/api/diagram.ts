@@ -9,6 +9,7 @@ const DEFAULT_DIRECTION = 'TD';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 const OPENAI_API_URL = process.env.OPENAI_API_URL || 'https://api.openai.com/v1/chat/completions';
 
+// Build the prompt to send to the LLM based on the request
 function buildPrompt(req: DiagramRequest & { direction?: string }) {
   const { text, diagramType, instruction, direction } = req;
   const dir = direction || DEFAULT_DIRECTION;
@@ -25,6 +26,7 @@ function buildPrompt(req: DiagramRequest & { direction?: string }) {
   return (userInstruction + directive).trim();
 }
 
+// Call the LLM (e.g. OpenAI) to generate a mermaid diagram from the prompt
 async function generateDiagramWithLLM(req: DiagramRequest): Promise<string> {
   if (!OPENAI_API_KEY) throw new Error('OpenAI API key is missing.');
   const prompt = buildPrompt(req);
@@ -53,6 +55,9 @@ function shorten(s: string, n: number) {
   return s.slice(0, n - 1) + '…';
 }
 
+/**
+ * A simple local fallback diagram generator for basic cases
+ */
 function fallbackDiagram(req: DiagramRequest & { direction?: string }): string {
   const { text, diagramType, direction, instruction } = req;
   let dir = direction || DEFAULT_DIRECTION;
@@ -131,6 +136,9 @@ function fallbackDiagram(req: DiagramRequest & { direction?: string }): string {
   return mermaid;
 }
 
+/**
+ * API route handler for diagram generation requests
+ */
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
