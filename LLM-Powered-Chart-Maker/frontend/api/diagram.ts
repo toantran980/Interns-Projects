@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 
@@ -41,7 +40,11 @@ async function generateDiagramWithLLM(req: DiagramRequest): Promise<string> {
   };
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` };
   const resp = await axios.post(OPENAI_API_URL, payload, { headers });
-  const content = (resp.data?.choices?.[0]?.message?.content) || resp.data?.choices?.[0]?.text;
+
+  // Fix: Assert the response type so TypeScript knows about .choices
+  type OpenAIResponse = { choices: { message?: { content: string }, text?: string }[] };
+  const choices = (resp.data as OpenAIResponse).choices;
+  const content = (choices?.[0]?.message?.content) || choices?.[0]?.text;
   if (!content) throw new Error('Empty response from LLM');
   return content;
 }
