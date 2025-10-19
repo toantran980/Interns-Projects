@@ -9,6 +9,7 @@ import PDFViewer from './PDFViewer';
 import useSelection from './hooks/useSelection';
 import { getApiBase, postDiagram } from './utils/api';
 import { moveCaretToEnd } from './utils/dom';
+import { Analytics } from '@vercel/analytics/react'
 
 type DiagramType = 'flowchart' | 'timeline' | 'rules';
 
@@ -135,10 +136,6 @@ export default function App() {
     const payload = { text: highlightedText || cachedSelection || text, diagramType, instruction: instructionTextAreaRef.current?.value };
     requestDiagram(payload, 'selection');
   }
-
-  // useSelection exposes hasSelectionOrHighlights
-
-  // selection behavior is handled inside the useSelection hook
 
   // Apply highlight color to selected text using hook
   function handleColorPick(color: string) {
@@ -296,6 +293,7 @@ export default function App() {
           <Mermaid chart={extractMermaidCode(mermaid)} />
         ) : null}
       </section>
+      <Analytics />
     </div>
   );
 }
